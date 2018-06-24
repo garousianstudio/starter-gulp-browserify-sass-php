@@ -1,0 +1,43 @@
+/**
+ * z-indexes
+ * check z() in _function.scss
+ */
+$z-layers: (
+	header: 10,
+	modal: 100
+);
+
+/**
+ * media query breakpoints
+ */
+$xxs :400px;
+$xs :500px;
+$sm :800px;
+$md :1050px;
+$lg :1400px;
+$xlg: 1900px;
+$xxlg: 2500px;
+
+
+/**
+ * some useful dimensions
+ * check width() in _function.scss
+ */
+$widths: (
+);
+
+/**
+ * some useful dimensions
+ * check height() in _function.scss
+ */
+$heights: (
+);
+
+
+/**
+ * colors
+ * check color() in _function.scss
+ */
+$colors: (
+	gray_3: #333333,
+);

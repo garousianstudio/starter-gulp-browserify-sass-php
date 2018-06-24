@@ -1,0 +1,12 @@
+*.scss
+
+.git-ftp-ignore
+.git-ftp-include
+.gitignore
+
+gulpfile.js
+package.json
+package-lock.json
+src/*
+
+faviconData.json

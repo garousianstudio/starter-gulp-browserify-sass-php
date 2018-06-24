@@ -1,0 +1,67 @@
+.container{
+  @extend %clearfix;
+  position: relative;
+  margin: 0 auto;
+}
+.row{
+  @extend %clearfix;
+  position: relative;
+  font-size: 0;
+  margin: 0 -15px -30px;
+}
+[class*='col-']{
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  font-size: 1rem;
+  padding: 0 15px;
+  margin-bottom: 30px;
+}
+
+@include col-generator('xs');
+@include mq_min($xs) { @include col-generator('sm'); }
+@include mq_min($sm) { @include col-generator('md'); }
+@include mq_min($md) { @include col-generator('lg'); }
+@include mq_min($lg) { @include col-generator('xlg'); }
+
+
+.visible-xs{
+  @include mq_min($xs){
+    display: none !important;
+  }
+}
+.visible-sm{
+  @include mq_min($sm){
+    display: none !important;
+  }
+}
+.visible-md{
+  @include mq_min($md){
+    display: none !important;
+  }
+}
+.visible-lg{
+  @include mq_min($lg){
+    display: none !important;
+  }
+}
+.hidden-xs{
+  @include mq_max($xs){
+    display: none !important;
+  }
+}
+.hidden-sm{
+  @include mq_max($sm){
+    display: none !important;
+  }
+}
+.hidden-md{
+  @include mq_max($md){
+    display: none !important;
+  }
+}
+.hidden-lg{
+  @include mq_max($lg){
+    display: none !important;
+  }
+}

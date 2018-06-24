@@ -1,0 +1,7 @@
+function init() {
+
+}
+
+$(function() {
+	init();
+})

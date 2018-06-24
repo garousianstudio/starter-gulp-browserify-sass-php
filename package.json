@@ -1,0 +1,40 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "gulp --color",
+    "build": "gulp build --color",
+    "serv": "gulp serv --color",
+    "favicon": "gulp favicon --color"
+  },
+  "author": "Garousian Studio",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "browser-sync": "^2.18.8",
+    "browserify": "^14.1.0",
+    "fs": "0.0.1-security",
+    "gulp": "^3.9.1",
+    "gulp-asset-versioning": "^0.1.2",
+    "gulp-connect-php": "0.0.8",
+    "gulp-favicons": "^2.2.7",
+    "gulp-if": "^2.0.2",
+    "gulp-postcss": "^6.4.0",
+    "gulp-real-favicon": "^0.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.4.1",
+    "gulp-strip-debug": "^2.0.0",
+    "gulp-svg-sprites": "^4.1.1",
+    "gulp-uglify": "^2.1.0",
+    "gulp-util": "^3.0.8",
+    "lazypipe": "^1.0.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "jquery": "^3.2.0",
+    "svgxuse": "^1.2.6"
+  }
+}

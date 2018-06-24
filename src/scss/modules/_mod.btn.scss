@@ -1,0 +1,24 @@
+.btn{
+	display: inline-block;
+	vertical-align: middle;
+	position: relative;
+	white-space: nowrap;
+	padding: rem(10) rem(20);
+	transition: color 0.15s ease-in-out,
+							background-color 0.15s ease-in-out;
+
+	/* states */
+	&:active{
+		transform: translateY(1px);
+	}
+
+	/* sizes */
+	&--sm{}
+	&--wide{}
+
+	/* colors */
+	&--blue{}
+
+	/* types */
+	&--circle{}
+}
