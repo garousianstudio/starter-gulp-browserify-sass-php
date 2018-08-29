@@ -3,11 +3,18 @@ html{
 
 	@include mq_min($xlg){font-size: 18px;}
 	@include mq_min($xxlg){font-size: 20px;}
+
+	&.rtl{
+		direction: rtl;
+		text-align: right;
+	}
+	&.ltr{
+		direction: ltr;
+		text-align: left;
+	}
 }
 body {
 	@extend %type_regular;
 	font-size: 1rem;
 	line-height: 1.7;
-	direction: rtl;
-	text-align: right;
 }
