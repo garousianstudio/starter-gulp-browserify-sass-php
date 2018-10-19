@@ -2,7 +2,7 @@
 Front-end starter kit with tools for development:
 
 - gulp as task runner
-- browserify for javascript module management
+- browserify for javascript module management with ES6
 - sass as css preprocessor
 - php for templating and future CMS integration
 
@@ -22,7 +22,6 @@ npm start
 ```
 npm start => start dev server and gulp tasks for js and css
 npm run build => use it for production
-npm run serv => start dev server
 npm run favicon => generate favicons
 ```
 

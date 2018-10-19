@@ -1,0 +1,1 @@
+<script src="<?=$config->js?>?<?=$config->hash?>"></script>

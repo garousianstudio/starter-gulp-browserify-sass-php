@@ -1,42 +1,59 @@
-var gulp = require('gulp'),
-		gutil = require('gulp-util'),
-		sass = require('gulp-sass'),
-		postcss = require('gulp-postcss'),
-		autoprefixer = require('autoprefixer'),
-		uglify = require('gulp-uglify'),
-		gulpif = require('gulp-if'),
-		browserSync = require('browser-sync').create(),
-		connect = require('gulp-connect-php'),
-		sourcemaps = require('gulp-sourcemaps'),
-		buffer = require('vinyl-buffer'),
-		source = require('vinyl-source-stream'),
-		browserify = require('browserify'),
-		svgSprite = require('gulp-svg-sprites'),
-		realFavicon = require('gulp-real-favicon'),
-		fs = require('fs'),
-		assetVersion = require('gulp-asset-versioning'),
-		stripDebug = require('gulp-strip-debug');
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const sass = require('gulp-sass');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const uglify = require('gulp-uglify');
+const gulpif = require('gulp-if');
+const browserSync = require('browser-sync').create();
+const sourcemaps = require('gulp-sourcemaps');
+const buffer = require('vinyl-buffer');
+const source = require('vinyl-source-stream');
+const browserify = require('browserify');
+const babelify = require('babelify');
+const svgSprite = require('gulp-svg-sprites');
+const realFavicon = require('gulp-real-favicon');
+const fs = require('fs');
+const stripDebug = require('gulp-strip-debug');
+const runSequence = require('run-sequence');
 
 
-var FAVICON_DATA_FILE = 'faviconData.json';
-var PORT = 5080;
-var jsSources = ['./src/js/main.js'];
-var autoreload = true;
+const FAVICON_DATA_FILE = 'faviconData.json';
+const PORT = 5080;
 
-gulp.task('set-autoreload-off',function(){
-	autoreload = false;
-});
+const SRC = {
+	js: 'src/js/',
+	sass: 'src/scss/',
+	sprite: 'src/svg/',
+	fonts: 'src/fonts/',
+	images: 'src/images/',
+	media: 'src/media/',
+	favicon: 'src/favicon/favicon.svg',
+};
+
+const BUILD = {
+	js: 'public/js',
+	sass: 'public/css',
+	sprite: 'public/images',
+	fonts: 'public/fonts',
+	images: 'public/images',
+	media: 'public/media',
+	favicon: 'public/images/favicons',
+};
+
+function onError(e) {
+	gutil.log(gutil.colors.red('========= ERROR ========='));
+	gutil.log(e.toString());
+	this.emit('end');
+}
 
 gulp.task('js', function() {
-	var bundler = browserify(jsSources, {
+	var bundler = browserify(`${SRC.js}main.js`, {
 			debug: true
 		})
+		.transform(babelify, { presets: ["@babel/preset-env"] })
 		.bundle()
-		.on('error', function(e) {
-			gutil.log(gutil.colors.red('========= ERROR JS ========'));
-			gutil.log(e.toString());
-			this.emit('end');
-		});
+		.on('error', onError);
 
 	return bundler
 		.pipe(source('script.js'))
@@ -45,67 +62,49 @@ gulp.task('js', function() {
 			loadMaps: true
 		}))
 		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest('./template/js'))
+		.pipe(gulp.dest(BUILD.js))
 		.pipe(gulpif(true, browserSync.stream()));
 });
 
+gulp.task('js-build', function() {
+	return gulp.src(`${BUILD.js}/script.js`)
+		.pipe(stripDebug())
+		.pipe(uglify())
+		.on('error', onError)
+		.pipe(gulp.dest(BUILD.js));
+});
+
 gulp.task('sass', function() {
-	return gulp.src('./src/scss/main.scss')
+	return gulp.src(`${SRC.sass}main.scss`)
 		.pipe(sourcemaps.init())
-		.pipe(sass({
-			outputStyle: 'compressed'
-		}))
-		.on('error', function(e) {
-			gutil.log(gutil.colors.red('========= ERROR SASS ========'));
-			gutil.log(e.toString());
-			this.emit('end');
-		})
-		.pipe(postcss([autoprefixer({
-			browsers: ['> 5%', '> 2% in IR', 'ie >= 9']
-		})]))
+		.pipe(sass())
+		.on('error', onError)
 		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest('./template/css'))
+		.pipe(gulp.dest(BUILD.sass))
 		.pipe(gulpif(true, browserSync.stream({
 			match: "**/*.css"
 		})));
 });
 
-gulp.task('connect', function() {
-	return connect.server({
-		port: 8001
-	});
-});
-
-gulp.task('browser-sync', function() {
-	return browserSync.init({
-		proxy: 'localhost:8001',
-		port: PORT,
-		notify: true // set to false for no notifications
-	});
-});
-
-gulp.task('asset-ver',function(){
-	// main css versioning
-	gulp.src('./fa/common/block.head.php')
-		.pipe(assetVersion({
-			assetPath: './template/css/main.css'
+gulp.task('sass-build', function() {
+	return gulp.src(`${SRC.sass}main.scss`)
+		.pipe(sourcemaps.init())
+		.pipe(sass({
+			outputStyle: 'compressed'
 		}))
-		.pipe(gulp.dest('./fa/common/'));
-
-	// main javascript versioning
-	gulp.src('./fa/common/block.js.php')
-		.pipe(assetVersion({
-			assetPath: './template/js/script.js'
-		}))
-		.pipe(gulp.dest('./fa/common/'));
+		.on('error', onError)
+		.pipe(postcss([autoprefixer({
+			browsers: ['> 5%', '> 2% in IR', 'ie >= 9']
+		})]))
+		.pipe(sourcemaps.write('./'))
+		.pipe(gulp.dest(BUILD.sass))
 });
 
-// generate sprite.svg file
-gulp.task('sprites', function() {
-	return gulp.src('./src/svg/*.svg')
+gulp.task('sprite', function() {
+	return gulp.src(`${SRC.sprite}*.svg`)
 		.pipe(svgSprite({
 			mode: "symbols",
-			svgId: "svg_%f",
+			svgId: "%f",
 			preview: {
 				sprite: false,
 				symbols: false,
@@ -134,21 +133,40 @@ gulp.task('sprites', function() {
 		    return data; // modify the data and return it
 		  }
 		}))
-		.on('error', function(e) {
-			gutil.log(gutil.colors.red('========= ERROR SPRITE ========'));
-			gutil.log(e.toString());
-			this.emit('end');
-		})
-		.pipe(gulp.dest("./template/images"))
+		.on('error', onError)
+		.pipe(gulp.dest(BUILD.sprite))
 		.pipe(gulpif(true, browserSync.stream()));
 });
 
-// generate favicon files in template/images/favicons
+gulp.task('fonts', function () {
+	return gulp.src(`${SRC.fonts}**/*`)
+    .pipe(gulp.dest(`${BUILD.fonts}`))
+});
+
+gulp.task('images', function () {
+	return gulp.src(`${SRC.images}**/*`)
+    .pipe(gulp.dest(`${BUILD.images}`))
+});
+
+gulp.task('media', function () {
+	return gulp.src(`${SRC.media}**/*`)
+    .pipe(gulp.dest(`${BUILD.media}`))
+});
+
+gulp.task('browser-sync', function() {
+	return browserSync.init({
+		proxy: 'localhost/starters/starter-gulp-browserify-sass-php',
+		port: PORT,
+		notify: true // set to false for no notifications
+	});
+});
+
+// generate favicon files in public/images/favicons
 gulp.task('generate-favicon', function() {
 	realFavicon.generateFavicon({
-		masterPicture: 'src/favicon/favicon.svg',
-		dest: 'template/images/favicons',
-		iconsPath: '../template/images/favicons/',
+		masterPicture: SRC.favicon,
+		dest: BUILD.favicon,
+		iconsPath: '../public/images/favicons/',
 		design: {
 			ios: {
 				pictureAspect: 'noChange',
@@ -201,45 +219,26 @@ gulp.task('generate-favicon', function() {
 		markupFile: FAVICON_DATA_FILE
 	});
 });
-// inject the favicon markups in fa/common/block.favicon.php file
-gulp.task('inject-favicon', ['generate-favicon'], function() {
-	return gulp.src(['fa/common/block.favicon.php'])
+// inject the favicon markups in php block
+gulp.task('favicon', ['generate-favicon'], function() {
+	return gulp.src('pages/common/favicon.php')
 		.pipe(realFavicon.injectFaviconMarkups(JSON.parse(fs.readFileSync(FAVICON_DATA_FILE)).favicon.html_code))
-		.pipe(gulp.dest('fa/common'));
+		.pipe(gulp.dest('pages/common'));
 });
-/**
- * main favicon task
- * run this task manually once or use it in 'dist' task
- * after running its dependencies it will clone a copy of 'fa/common/block.favicon.php'
- * in 'en/common/' folder
- */
-gulp.task('favicon', ['inject-favicon'], function() {
-	return gulp.src('./fa/common/block.favicon.php')
-		.pipe(gulp.dest('./en/common'));
+
+gulp.task('all', ['fonts', 'images', 'media', 'sass', 'js', 'sprite']);
+
+gulp.task('default', ['browser-sync', 'all'], function() {
+	gulp.watch(`${SRC.sass}**/*.scss`, ['sass']);
+	gulp.watch(`${SRC.js}**/*.js`, ['js']);
+	gulp.watch(`${SRC.sprite}**/*.svg`, ['sprite']);
+	gulp.watch(`${SRC.images}**/*`, { cwd:'./' }, ['images']);
+	gulp.watch(`${SRC.media}**/*`, { cwd:'./' }, ['media']);
+	gulp.watch('pages/**/*.php', {interval: 500}).on('change', browserSync.reload);
 });
 
 // build tasks
-gulp.task('build', ['sass', 'js', 'asset-ver'], function() {
-	// minifiy script.js
-	return gulp.src('./template/js/script.js')
-		.pipe(stripDebug())
-		.pipe(uglify())
-		.on('error', function(e) {
-			gutil.log(gutil.colors.red('========= ERROR BUILD ========'));
-			gutil.log(e.toString());
-			this.emit('end');
-		})
-		.pipe(gulp.dest('./template/js'));
-});
-
-gulp.task('default', ['connect','browser-sync', 'sass', 'js', 'sprites'], function() {
-	gulp.watch('src/scss/**/*.scss', ['sass']);
-	gulp.watch('src/js/**/*.js', ['js']);
-	gulp.watch('src/svg/**/*.svg', ['sprites']);
-	gulp.watch(['index.php','fa/**/*.php','en/**/*.php'], {interval: 500}).on('change', browserSync.reload);
-});
-
-// serv task
-gulp.task('serv', ['connect', 'browser-sync'], function() {
+gulp.task('build', function() {
+	runSequence('all', 'sass-build', 'js-build');
 });
 

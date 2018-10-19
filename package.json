@@ -6,19 +6,19 @@
   "scripts": {
     "start": "gulp --color",
     "build": "gulp build --color",
-    "serv": "gulp serv --color",
     "favicon": "gulp favicon --color"
   },
   "author": "Garousian Studio",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
     "autoprefixer": "^6.7.7",
+    "babelify": "^10.0.0",
     "browser-sync": "^2.18.8",
     "browserify": "^14.1.0",
     "fs": "0.0.1-security",
     "gulp": "^3.9.1",
-    "gulp-asset-versioning": "^0.1.2",
-    "gulp-connect-php": "0.0.8",
     "gulp-favicons": "^2.2.7",
     "gulp-if": "^2.0.2",
     "gulp-postcss": "^6.4.0",
@@ -30,6 +30,7 @@
     "gulp-uglify": "^2.1.0",
     "gulp-util": "^3.0.8",
     "lazypipe": "^1.0.1",
+    "run-sequence": "^2.2.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
