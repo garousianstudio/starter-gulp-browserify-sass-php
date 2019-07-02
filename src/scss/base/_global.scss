@@ -1,20 +1,23 @@
 html{
 	font-size: 16px;
 
-	@include mq_min($xlg){font-size: 18px;}
-	@include mq_min($xxlg){font-size: 20px;}
+	@include mq_min($xxlg){font-size: 18px;}
+}
 
-	&.rtl{
+body {
+	@extend %type-regular;
+	font-size: rem(16);
+	line-height: 1.7;
+}
+
+.page{
+	/* use direction on page because of IE and Edge left vertical scroll */
+	html.rtl &{
 		direction: rtl;
 		text-align: right;
 	}
-	&.ltr{
+	html.ltr &{
 		direction: ltr;
 		text-align: left;
 	}
-}
-body {
-	@extend %type_regular;
-	font-size: 1rem;
-	line-height: 1.7;
 }

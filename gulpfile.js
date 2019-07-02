@@ -17,6 +17,9 @@ const fs = require('fs');
 const stripDebug = require('gulp-strip-debug');
 const runSequence = require('run-sequence');
 
+require('dotenv').config({
+	path: '.env'
+});
 
 const FAVICON_DATA_FILE = 'faviconData.json';
 const PORT = 5080;
@@ -38,7 +41,7 @@ const BUILD = {
 	fonts: 'public/fonts',
 	images: 'public/images',
 	media: 'public/media',
-	favicon: 'public/images/favicons',
+	favicon: 'src/images/favicons',
 };
 
 function onError(e) {
@@ -49,9 +52,21 @@ function onError(e) {
 
 gulp.task('js', function() {
 	var bundler = browserify(`${SRC.js}main.js`, {
-			debug: true
+			debug: true,
+			fullPaths: process.env.NODE_ENV == 'dev',
 		})
-		.transform(babelify, { presets: ["@babel/preset-env"] })
+		.transform(babelify, {
+			presets: [
+				[
+					"@babel/preset-env",
+					{
+						corejs: 3,
+						useBuiltIns: 'usage', /* use polyfills */
+					}
+				]
+			]
+		})
+		.on('error', onError)
 		.bundle()
 		.on('error', onError);
 
@@ -66,7 +81,7 @@ gulp.task('js', function() {
 		.pipe(gulpif(true, browserSync.stream()));
 });
 
-gulp.task('js-build', function() {
+gulp.task('js:build', function() {
 	return gulp.src(`${BUILD.js}/script.js`)
 		.pipe(stripDebug())
 		.pipe(uglify())
@@ -86,7 +101,7 @@ gulp.task('sass', function() {
 		})));
 });
 
-gulp.task('sass-build', function() {
+gulp.task('sass:build', function() {
 	return gulp.src(`${SRC.sass}main.scss`)
 		.pipe(sourcemaps.init())
 		.pipe(sass({
@@ -155,8 +170,8 @@ gulp.task('media', function () {
 
 gulp.task('browser-sync', function() {
 	return browserSync.init({
-		proxy: 'localhost/starters/starter-gulp-browserify-sass-php',
-		port: PORT,
+		proxy: process.env.BASEURL,
+		port: process.env.PORT,
 		notify: true // set to false for no notifications
 	});
 });
@@ -229,11 +244,11 @@ gulp.task('favicon', ['generate-favicon'], function() {
 gulp.task('all', ['fonts', 'images', 'media', 'sass', 'js', 'sprite']);
 
 gulp.task('default', ['browser-sync', 'all'], function() {
-	gulp.watch(`${SRC.sass}**/*.scss`, ['sass']);
-	gulp.watch(`${SRC.js}**/*.js`, ['js']);
-	gulp.watch(`${SRC.sprite}**/*.svg`, ['sprite']);
-	gulp.watch(`${SRC.images}**/*`, { cwd:'./' }, ['images']);
-	gulp.watch(`${SRC.media}**/*`, { cwd:'./' }, ['media']);
+	gulp.watch(`${SRC.sass}**/*.scss`, { interval: 500 }, ['sass']);
+	gulp.watch(`${SRC.js}**/*.js`, { interval: 500 }, ['js']);
+	gulp.watch(`${SRC.sprite}**/*.svg`, { interval: 500 }, ['sprite']);
+	gulp.watch(`${SRC.images}**/*`, { cwd:'./', interval: 500 }, ['images']);
+	gulp.watch(`${SRC.media}**/*`, { cwd:'./', interval: 500 }, ['media']);
 	gulp.watch('pages/**/*.php', {interval: 500}).on('change', browserSync.reload);
 });
 

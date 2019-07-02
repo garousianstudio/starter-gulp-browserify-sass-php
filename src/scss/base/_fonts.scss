@@ -17,7 +17,7 @@ This set of fonts are used in this project under the license: (.....)
 *
 **/
 @font-face {
-	font-family: IRANSansBold;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: bold;
 	src: url('../fonts/iransans/eot/IRANSansWeb_Bold.eot');
@@ -27,7 +27,7 @@ This set of fonts are used in this project under the license: (.....)
 		 url('../fonts/iransans/ttf/IRANSansWeb_Bold.ttf') format('truetype');
 }
 @font-face {
-	font-family: IRANSansMedium;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: 500;
 	src: url('../fonts/iransans/eot/IRANSansWeb_Medium.eot');
@@ -47,7 +47,7 @@ This set of fonts are used in this project under the license: (.....)
 		 url('../fonts/iransans/ttf/IRANSansWeb.ttf') format('truetype');
 }
 @font-face {
-	font-family: IRANSansLight;
+	font-family: IRANSans;
 	font-style: normal;
 	font-weight: 300;
 	src: url('../fonts/iransans/eot/IRANSansWeb_Light.eot');
@@ -57,9 +57,9 @@ This set of fonts are used in this project under the license: (.....)
 		 url('../fonts/iransans/ttf/IRANSansWeb_Light.ttf') format('truetype');
 }
 /*@font-face {
-	font-family: IRANSansUltraLight;
+	font-family: IRANSans;
 	font-style: normal;
-	font-weight: 200;
+	font-weight: 100;
 	src: url('../fonts/iransans/eot/IRANSansWeb_UltraLight.eot');
 	src: url('../fonts/iransans/eot/IRANSansWeb_UltraLight.eot?#iefix') format('embedded-opentype'),
 		 url('../fonts/iransans/woff2/IRANSansWeb_UltraLight.woff2') format('woff2'),

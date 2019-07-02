@@ -1,1 +1,1 @@
-<script src="<?=$config->js?>?<?=$config->hash?>"></script>
+<script src="<?=$config->js?>"></script>

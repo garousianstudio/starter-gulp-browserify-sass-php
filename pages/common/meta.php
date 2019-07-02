@@ -4,7 +4,7 @@ if(!isset($page_keywords)){
 }
 ?>
 
-<title><?php echo $page_title; ?></title>
+<title><?=$page_title?></title>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

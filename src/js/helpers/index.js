@@ -1,31 +1,39 @@
 import $ from 'jquery';
 
-global.requestAnimationFrame = window.requestAnimationFrame
+/**
+ * define helper object
+ */
+const h = {};
+
+h.requestAnimationFrame = window.requestAnimationFrame
 			|| window.mozRequestAnimationFrame
 			|| window.webkitRequestAnimationFrame
 			|| window.msRequestAnimationFrame;
 
-global.cancelAnimationFrame = window.cancelAnimationFrame
+h.cancelAnimationFrame = window.cancelAnimationFrame
 			|| window.mozCancelAnimationFrame;
 
 // media query breakpoints
-global.SCREEN = {
+h.SCREEN = {
 	XS: 500,
 	SM: 800,
 	MD: 1050,
 	LG: 1440
 };
 
+h.$window = $(window);
+h.$document = $(document);
+h.$body = $('body');
+h.$page = $('.page');
+
+// check 'meta.php' for more info
+h.BASEURL = getMeta('baseurl');
+h.LANG = getMeta('lang');
+h.DIR = getMeta('dir');
+
+
 function getMeta(name) {
 	return $('meta[property=' + JSON.stringify(name) + ']').attr('content');
 };
 
-global.$window = $(window);
-global.$document = $(document);
-global.$body = $('body');
-global.$page = $('.page');
-
-global.BASEURL = getMeta('baseurl');
-global.LANG = getMeta('lang');
-global.DIR = getMeta('dir');
-
+export default h;

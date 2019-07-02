@@ -1,1 +1,1 @@
-<link rel="stylesheet" href="<?=$config->css?>?<?=$config->hash?>">
+<link rel="stylesheet" href="<?=$config->css?>">

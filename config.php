@@ -1,5 +1,7 @@
 <?php
-include 'pages/func/functions.php';
+$env = file_get_contents(__DIR__ . '/.env');
+preg_match('/BASEURL=(.*)/', $env, $baseUrl);
+$baseUrl = trim($baseUrl[1]);
 
 $config = (object)array(
 	'isDev' => true, // whether in 'development' or 'production' mode
@@ -9,15 +11,14 @@ $config = (object)array(
 	'root' => __DIR__, // directory path to root of project (for php blocks if needed)
 	'lang' => 'fa',
 	'dir' => 'rtl', // oneof(['rtl', 'ltr'])
-	'css' => 'public/css/main.css', // only used in production
-	'js' => 'public/js/script.js',
-	'sprite' => 'public/images/sprite.svg',
-	'hash' => 'sdfsdf', // hash for cache busting (preventing the browser to cache assets)
+	'css' => 'public/css/main.css?v=0.1.0', // only used in production
+	'js' => 'public/js/script.js?v=0.1.0',
+	'sprite' => 'public/images/sprite.svg?v=0.1.0',
 );
 
 // set baseUrl in local/server
 if($config->isLocal){
-	$config->baseUrl = 'http://localhost/starters/starter-gulp-browserify-sass-php/';
+	$config->baseUrl = $baseUrl;
 }else{
 	$config->isHttps = (@$_SERVER['HTTPS'] == 'on' || @$_SERVER['SERVER_PORT'] == 443) ? true : false;
 	$config->baseUrl = ($config->isHttps ? "https" : "http") . '://' . $_SERVER['HTTP_HOST'] . '/';
@@ -43,4 +44,6 @@ switch ($config->lang) {
 		$config->dir = 'ltr';
 		break;
 }
+
+include 'pages/func/functions.php';
 ?>
