@@ -254,6 +254,6 @@ gulp.task('default', ['browser-sync', 'all'], function() {
 
 // build tasks
 gulp.task('build', function() {
-	runSequence('all', 'sass-build', 'js-build');
+	runSequence('all', 'sass:build', 'js:build');
 });
 
