@@ -27,6 +27,8 @@ if($config->isLocal){
 $config->css = $config->baseUrl . $config->css;
 $config->js = $config->baseUrl . $config->js;
 $config->sprite = $config->baseUrl . $config->sprite;
+$config->media = $config->baseUrl . 'public/media/';
+$config->images = $config->baseUrl . 'public/images/';
 
 if(isset($_GET['lng']) && !empty($_GET['lng'])){
 	$lang = checkinput($_GET['lng']);
