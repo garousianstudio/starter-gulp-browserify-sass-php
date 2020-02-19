@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "gulp --color",
-    "build": "gulp build --color",
-    "serv": "gulp serv --color",
-    "favicon": "gulp favicon --color"
+    "dev": "gulp --color",
+    "build": "npm run clean && gulp build --color",
+    "clean": "rimraf public/",
+    "disc": "cross-env NODE_ENV=dev gulp js --color && gulp js:build --color && discify public/js/script.js > disc.html"
   },
   "author": "Garousian Studio",
   "license": "ISC",
@@ -39,7 +39,8 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
-    "jquery": "^3.2.0",
+    "core-js": "^3.1.4",
+    "jquery": "^3.4.1",
     "svgxuse": "^1.2.6"
   }
 }

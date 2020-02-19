@@ -1,12 +1,16 @@
-%type_bold{
-	font-family: 'IRANSansBold',tahoma,arial;
+%type-bold{
+	font-family: IRANSans, tahoma, arial;
+	font-weight: bold;
 }
-%type_medium{
-	font-family: 'IRANSansMedium',tahoma,arial;
+%type-medium{
+	font-family: IRANSans, tahoma, arial;
+	font-weight: 500;
 }
-%type_regular{
-	font-family: 'IRANSans',tahoma,arial;
+%type-regular{
+	font-family: IRANSans, tahoma, arial;
+	font-weight: normal;
 }
-%type_light{
-	font-family: 'IRANSansLight',tahoma,arial;
+%type-light{
+	font-family: IRANSans, tahoma, arial;
+	font-weight: 300;
 }

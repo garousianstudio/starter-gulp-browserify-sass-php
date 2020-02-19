@@ -1,1 +1,7 @@
 node_modules/
+public/
+.git-ftp-ignore
+.git-ftp-include
+.vscode/
+disc.html
+.env

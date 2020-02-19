@@ -1,7 +1,0 @@
-function init() {
-
-}
-
-$(function() {
-	init();
-})

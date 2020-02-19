@@ -5,21 +5,4 @@ RewriteCond %{REQUEST_FILENAME} !-d
 #Setting Character Set
 	AddDefaultCharset UTF-8
 
-#Prevent Directory Listing
-	#Options - Indexes
-
-#==============================
-#Farsi Version Rules :START
-#==============================
-	RewriteRule ^fa/?$ fa/index.php [L]
-#==============================
-#Farsi Version Rules :END
-#==============================
-
-#==============================
-#English Version Rules :START
-#==============================
-	RewriteRule ^en/?$ en/index.php [L]
-#==============================
-#English Version Rules :END
-#==============================
+RewriteRule ^home/?$ pages/index.php [L]
